@@ -23,6 +23,12 @@ contract DecentralizedAuction {
     event AuctionEnded(uint itemId, address winner, uint amount);
     event ItemBoughtOut(uint itemId, address buyer, uint amount);
 
+    constructor() {
+        addItem("Vintage Phone", "https://m.media-amazon.com/images/I/71tQC-279uL.jpg", 500 ether, 2500 ether, 180 minutes);
+        addItem("Record Player", "https://ii1.pepperfry.com/media/catalog/product/g/o/494x544/gold-brass-and-wood-embossed-horn-and-gramophone-by-exim-decor-gold-brass-and-wood-embossed-horn-and-fjizt5.jpg", 1200 ether, 7000 ether, 180 minutes);
+        addItem("Aladdin Movie Prop", "https://multiwood.com.pk/cdn/shop/products/Picsart_22-10-23_03-53-33-812_1000x1000.jpg?v=1666479726", 78000 ether, 250000 ether, 180 minutes);
+    }
+
     function addItem(string memory name, string memory imageUrl, uint minBid, uint buyoutPrice, uint biddingTime) public {
         uint auctionEndTime = block.timestamp + biddingTime;
         items.push(Item({
@@ -84,4 +90,9 @@ contract DecentralizedAuction {
             emit AuctionEnded(itemId, item.highestBidder, item.highestBid);
         }
     }
+
+    function itemsCount() public view returns (uint) {
+        return items.length;
+    }
+
 }

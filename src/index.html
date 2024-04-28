@@ -398,7 +398,7 @@
                               "constant": true
                             }
             ];
-            const contractAddress = '0x0E62d38c3623A09Cbe3C630df7dCf06120F013b6';
+            const contractAddress = '0x3A1ACAF34c46b0AB2F53A902EBBc2B14fafB8eB0';
             contract = new web3.eth.Contract(abi, contractAddress);
 
             web3.eth.getAccounts(function(err, accounts) {
@@ -430,8 +430,8 @@
                 <div class="card">
                     <img src="${item.imageUrl}" alt="${item.name}">
                     <h2>${item.name}</h2>
-                    <p class="bid-info">Current Bid Price: ${etherValue(item.highestBid, 'ether')} ETH</p>
-                    <p class="buyout-info">Buyout Price: ${etherValue(item.buyoutPrice, 'ether')} ETH</p>
+                    <p class="bid-info">Current Bid Price: ${etherValue(item.highestBid, 'ether')} TST</p>
+                    <p class="buyout-info">Buyout Price: ${etherValue(item.buyoutPrice, 'ether')} TST</p>
                     <div class="timer" id="timer-${index}">Time Left: 00:00</div>
                     <button class="bid-button" onclick="placeBid(${item.id})">Place Bid</button>
                     <button class="buyout-button" onclick="buyout(${item.id})">Buy Now</button>

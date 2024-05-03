@@ -56,14 +56,31 @@ async function initApp() {
   }
 }
 
-function loadItems() {
-    contract.methods.itemsCount().call().then(function(count) {
-        for (let i = 0; i < count; i++) {
-            contract.methods.items(i).call().then(function(item) {
-                displayItem(item, i);
-            });
-        }
+function placeBid(itemId) {
+    var bidAmount = prompt("Enter your bid amount in ETH:");
+    if (bidAmount != null) {
+        contract.methods.bid(itemId).send({
+            from: userAccount,
+            value: web3.utils.toWei(bidAmount, 'ether')
+        });
+    }
+}
+
+function buyout(itemId) {
+    contract.methods.items(itemId).call().then(function(item) {
+        contract.methods.buyout(itemId).send({
+            from: userAccount,
+            value: item.buyoutPrice
+        });
     });
+}
+
+async function loadItems() {
+    const count = await contract.methods.itemsCount().call();
+    for (let i = 0; i < count; i++) {
+        const item = await contract.methods.items(i).call();
+        displayItem(item, i);
+    }
 }
 
 function displayItem(item, index) {
@@ -84,30 +101,10 @@ function displayItem(item, index) {
     updateTimer(index, item.auctionEndTime);
 }
 
-function placeBid(itemId) {
-    var bidAmount = prompt("Enter your bid amount in ETH:");
-    if (bidAmount != null) {
-        contract.methods.bid(itemId).send({
-            from: userAccount,
-            value: web3.utils.toWei(bidAmount, 'ether')
-        });
-    }
-}
-
-function buyout(itemId) {
-    contract.methods.items(itemId).call().then(function(item) {
-        contract.methods.buyout(itemId).send({
-            from: userAccount,
-            value: item.buyoutPrice
-        });
-    });
-}
-
-function updateTimer(index, endTime) {
-    console.log("Starting Timmer for Item at Index : " + index);
+async function updateTimer(index, endTime) {
+    console.log("Running Timer for Item at Index : " + index);
     const timer = document.getElementById(`timer-${index}`);
-    const x = setInterval(function() {
-        console.log("Running Timmer for Item at Index : " + index);
+    let updateTime = async function() {
         let now = new Date().getTime();
         let distance = endTime * 1000 - now;
         let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -115,10 +112,12 @@ function updateTimer(index, endTime) {
         let seconds = Math.floor((distance % (1000 * 60)) / 1000);
         timer.innerHTML = `Time Left: ${hours}h ${minutes}m ${seconds}s`;
 
-        if (distance < 0) {
-            clearInterval(x);
-            console.log("Stopping Timmer for Item at Index : " + index);
+        if (distance <= 0) {
             timer.innerHTML = "EXPIRED";
+        } else {
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second
+            updateTime();
         }
-    }, 1000);
+    };
+    await updateTime();
 }

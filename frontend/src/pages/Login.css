@@ -23,7 +23,7 @@
 .login-label {
     margin-bottom: 16px;
     font-size: 20px;
-    color: #fff;
+    color: #ffffff;
 }
 
 .login-input {
@@ -42,8 +42,8 @@
 
 .login-button {
     padding: 15px 10px;
-    color: #000;
-    background-color: rgba(255, 255, 255, 0.85);
+    color: #ffffff;
+    background-color: rgba(120, 145, 212, 0.85);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -53,6 +53,7 @@
 
 .login-button:hover {
     background-color: rgba(255, 255, 255, 0.95);
+    color: black;
 }
 
 .login-header {

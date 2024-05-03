@@ -4,7 +4,8 @@ import { useState } from 'react';
 
 function AuctionItem({ item, contract, accounts, web3 }) {
 
-  let [price,setPrice] = useState(web3.utils.fromWei(item.highestBid,'ether'));
+  const [price,setPrice] = useState(web3.utils.fromWei(item.highestBid,'ether'));
+  const [isExpired,setExpired] = useState(item.ended);
 
   const placeBid = async (itemId, bidAmount) => {
     bidAmount = prompt("Enter your bid amount in ETH:");
@@ -23,9 +24,10 @@ function AuctionItem({ item, contract, accounts, web3 }) {
       from: accounts[0],
       value: itemDetails.buyoutPrice
     });
+    setExpired(true);
   };
 
-  let isEnded = "card " + (item.ended ? "disabled" : "");
+  let isEnded = "card " + (isExpired ? "disabled" : "");
   
   return (
     <div className={isEnded}>
@@ -34,10 +36,10 @@ function AuctionItem({ item, contract, accounts, web3 }) {
       <p className="bid-info">Current Bid Price: {Number(price)} AUC</p>
       <p className="buyout-info">Buyout Price: {web3.utils.fromWei(item.buyoutPrice, 'ether')} AUC</p>
       
-      <p className='status-active'>{item.ended ? "EXPIRED" : "ACTIVE"}</p>
+      <p className='status-active'>{isExpired ? "EXPIRED" : "ACTIVE"}</p>
   
-      <button className="bid-button" onClick={() => placeBid(item.id)} disabled = {item.ended}>Place Bid</button>
-      <button className="buyout-button" onClick={() => buyout(item.id)} disabled = {item.ended}>Buy Now</button>
+      <button className="bid-button" onClick={() => placeBid(item.id)} disabled = {isExpired}>Place Bid</button>
+      <button className="buyout-button" onClick={() => buyout(item.id)} disabled = {isExpired}>Buy Now</button>
     </div>
   );
 }

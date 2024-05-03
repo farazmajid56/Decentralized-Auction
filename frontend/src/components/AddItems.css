@@ -1,0 +1,48 @@
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;  /* This padding ensures space around the content inside the form */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  border-radius: 8px;
+}
+
+form h2 {
+  text-align: center;
+  color: #333;
+}
+
+label {
+  margin-bottom: 10px; /* Spacing below each label */
+  color: #333;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: calc(100% - 20px); /* Adjust width to account for padding */
+  padding: 10px;
+  margin-top: 5px;
+  margin-right: auto; /* Aligns margin to both sides */
+  margin-left: auto;  /* Aligns margin to both sides */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px; /* Add margin-top to give space above the button */
+}
+
+button:hover {
+  background-color: #0056b3;
+}

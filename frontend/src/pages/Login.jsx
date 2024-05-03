@@ -10,7 +10,7 @@ const Login = ({ onLogin }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        onLogin(name);
+        onLogin();
     };
 
     return (

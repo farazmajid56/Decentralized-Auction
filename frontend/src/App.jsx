@@ -5,6 +5,7 @@ import Web3 from 'web3';
 import AuctionItem from './components/AuctionItem'; // Component for auction items
 import NavBar from './components/NavBar';
 import AddItems from './components/AddItems'
+import Login from './pages/Login'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -16,6 +17,7 @@ function App() {
   const [contract, setContract] = useState(null);
   const [items, setItems] = useState([]);
   const [isOpenAddItemsPage, setisOpenAddItemsPage] = useState(false);
+  const [isLoggedIn, setisLoggedIn] = useState(false);
 
   useEffect(() => {
     const initWeb3 = async () => {
@@ -56,30 +58,49 @@ function App() {
     initWeb3();
   }, []);
 
-  const openAddItemsPage = () => {
+  const toggleAddItemsPage = () => {
       setisOpenAddItemsPage(prevState => !prevState);
+  }
+  const toggleisLoggedIn = () => {
+    setisLoggedIn(prevState => !prevState);
   }
 
   return (
     <>
-      <NavBar/>
-      {isOpenAddItemsPage ? (
-        <AddItems contract={contract} accounts={accounts} web3={web3} back={openAddItemsPage} />
+      {!isLoggedIn ? (
+        <Login onLogin={toggleisLoggedIn} />
       ) : (
-        <div className="App">
-          <button className='btn-addItem' onClick={openAddItemsPage}>
-            <FontAwesomeIcon icon={faPlus} size="2x" />
-          </button>
-          <div className="feed">
-            {items.map((item, index) => (
-              <AuctionItem key={index} item={item} contract={contract} accounts={accounts} web3={web3} />
-            ))}
-          </div>
-        </div>
+        <>
+          <NavBar />
+          {isOpenAddItemsPage ? (
+            <AddItems 
+              contract={contract} 
+              accounts={accounts} 
+              web3={web3} 
+              back={toggleAddItemsPage} 
+            />
+          ) : (
+            <div className="App">
+              <button className='btn-addItem' onClick={toggleAddItemsPage}>
+                <FontAwesomeIcon icon={faPlus} size="2x" />
+              </button>
+              <div className="feed">
+                {items.map((item, index) => (
+                  <AuctionItem 
+                    key={index} 
+                    item={item} 
+                    contract={contract} 
+                    accounts={accounts} 
+                    web3={web3} 
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </>
-  );
-  
+  );  
 }
 
 export default App;

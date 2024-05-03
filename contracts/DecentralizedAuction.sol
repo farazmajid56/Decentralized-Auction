@@ -95,4 +95,13 @@ contract DecentralizedAuction {
         return items.length;
     }
 
+    function timeLeft(uint itemId) public view returns (uint) {
+    Item storage item = items[itemId];
+    if (block.timestamp >= item.auctionEndTime) {
+        return 0;
+    }
+    return item.auctionEndTime - block.timestamp;
+}
+
+
 }

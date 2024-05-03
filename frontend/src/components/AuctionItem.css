@@ -6,6 +6,9 @@
     padding: 20px;
     text-align: center;
 }
+.disabled {
+    filter: grayscale(100%);
+}
 .card img {
     width: 100%;
     height: 200px; /* Changed for better layout */
@@ -36,6 +39,12 @@
 .buyout-button:hover, .bid-button:hover {
     opacity: 0.8;
 }
+.buyout-button:disabled, .bid-button:disabled {
+    pointer-events: none;
+    cursor: not-allowed; 
+    opacity: 0.8;
+    background-color: grey;
+}
 .status-active{
     color: lightseagreen;
     font-size: 16;
@@ -43,4 +52,6 @@
 }
 .status-ended{
     color: coral;
+    font-size: 16;
+    font-weight: bold;
 }

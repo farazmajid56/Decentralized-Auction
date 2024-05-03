@@ -25,15 +25,19 @@ function AuctionItem({ item, contract, accounts, web3 }) {
     });
   };
 
+  let isEnded = "card " + (item.ended ? "disabled" : "");
+  
   return (
-    <div className="card">
+    <div className={isEnded}>
       <img src={item.imageUrl} alt={item.name} />
       <h2>{item.name}</h2>
       <p className="bid-info">Current Bid Price: {Number(price)} AUC</p>
       <p className="buyout-info">Buyout Price: {web3.utils.fromWei(item.buyoutPrice, 'ether')} AUC</p>
-      <p className='status-active'>Active</p>
-      <button className="bid-button" onClick={() => placeBid(item.id)}>Place Bid</button>
-      <button className="buyout-button" onClick={() => buyout(item.id)}>Buy Now</button>
+      
+      <p className='status-active'>{item.ended ? "EXPIRED" : "ACTIVE"}</p>
+  
+      <button className="bid-button" onClick={() => placeBid(item.id)} disabled = {item.ended}>Place Bid</button>
+      <button className="buyout-button" onClick={() => buyout(item.id)} disabled = {item.ended}>Buy Now</button>
     </div>
   );
 }

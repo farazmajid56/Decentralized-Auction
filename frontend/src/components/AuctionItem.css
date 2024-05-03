@@ -36,3 +36,11 @@
 .buyout-button:hover, .bid-button:hover {
     opacity: 0.8;
 }
+.status-active{
+    color: lightseagreen;
+    font-size: 16;
+    font-weight: bold;
+}
+.status-ended{
+    color: coral;
+}

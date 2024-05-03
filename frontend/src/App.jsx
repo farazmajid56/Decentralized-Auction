@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Web3 from 'web3';
-import AuctionItem from './AuctionItem'; // Component for auction items
+import AuctionItem from './components/AuctionItem'; // Component for auction items
 
 function App() {
   const [web3, setWeb3] = useState(null);

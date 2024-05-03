@@ -21,12 +21,7 @@ body {
   margin: 0;
   padding: 0;
 }
-.title-bar {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  text-align: center;
-}
+
 .feed {
   display: flex;
   flex-wrap: wrap;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Web3 from 'web3';
 import AuctionItem from './components/AuctionItem'; // Component for auction items
+import NavBar from './components/NavBar';
 
 function App() {
   const [web3, setWeb3] = useState(null);
@@ -50,16 +51,12 @@ function App() {
 
   return (
     <div className="App">
-      <header className="title-bar">
-        <h1>Decentralized Auction House</h1>
-        <p>By: Faraz Majid 20L-1162 & Aemon Fatima 20L-1057</p>
-      </header>
+      <NavBar/>
       <div className="feed">
-      {items.map((item, index) => (
-        <AuctionItem key={index} item={item} contract={contract} accounts={accounts} web3={web3}/>
-      ))}
+        {items.map((item, index) => <AuctionItem key={index} item={item} contract={contract} accounts={accounts} web3={web3}/> )}
       </div>
     </div>
+    // <Login/>
   );
 }
 

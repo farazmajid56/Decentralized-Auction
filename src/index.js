@@ -19,24 +19,26 @@ window.addEventListener('load', async function() {
     }
 });
 
-async function GetABI() {
+async function GetContractConfigData() {
   try {
       const response = await fetch('DecentralizedAuction.json');
       if (!response.ok) {
-          throw new Error('Failed to fetch the ABI JSON file');
+          throw new Error('Failed to fetch DecentralizedAuction.json');
       }
       const jsonData = await response.json();
-      return jsonData.abi;
+      return {abi:jsonData.abi, address:jsonData.networks['5777'].address};
   } catch (error) {
-      console.error('Error reading ABI JSON file:', error);
+      console.error('Error reading ABI from JSON file:', error);
       return null;
   }
 }
 
 async function initApp() {
   try {
-      const abi = await GetABI();
-      const contractAddress = '0xE51Da7B8731f48Eb51DA203108B539deb9BE6c35';
+      const contractConfig = await GetContractConfigData();
+      const abi = contractConfig.abi;
+      const contractAddress = contractConfig.address//'0xE51Da7B8731f48Eb51DA203108B539deb9BE6c35';
+      console.log("Contract Address: " + contractAddress)
       contract = new web3.eth.Contract(abi, contractAddress);
 
     web3.eth.getAccounts(function(err, accounts) {

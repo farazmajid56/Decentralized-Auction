@@ -104,8 +104,10 @@ function buyout(itemId) {
 }
 
 function updateTimer(index, endTime) {
+    console.log("Starting Timmer for Item at Index : " + index);
     const timer = document.getElementById(`timer-${index}`);
     const x = setInterval(function() {
+        console.log("Running Timmer for Item at Index : " + index);
         let now = new Date().getTime();
         let distance = endTime * 1000 - now;
         let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -115,6 +117,7 @@ function updateTimer(index, endTime) {
 
         if (distance < 0) {
             clearInterval(x);
+            console.log("Stopping Timmer for Item at Index : " + index);
             timer.innerHTML = "EXPIRED";
         }
     }, 1000);

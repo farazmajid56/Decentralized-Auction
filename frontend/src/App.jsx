@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Web3 from 'web3';
+
 import AuctionItem from './components/AuctionItem'; // Component for auction items
 import NavBar from './components/NavBar';
+import AddItems from './components/AddItems'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 
 function App() {
   const [web3, setWeb3] = useState(null);
   const [accounts, setAccounts] = useState([]);
   const [contract, setContract] = useState(null);
   const [items, setItems] = useState([]);
+  const [isOpenAddItemsPage, setisOpenAddItemsPage] = useState(false);
 
   useEffect(() => {
     const initWeb3 = async () => {
@@ -49,15 +56,30 @@ function App() {
     initWeb3();
   }, []);
 
+  const openAddItemsPage = () => {
+      setisOpenAddItemsPage(prevState => !prevState);
+  }
+
   return (
-    <div className="App">
+    <>
       <NavBar/>
-      <div className="feed">
-        {items.map((item, index) => <AuctionItem key={index} item={item} contract={contract} accounts={accounts} web3={web3}/> )}
-      </div>
-    </div>
-    // <Login/>
+      {isOpenAddItemsPage ? (
+        <AddItems contract={contract} accounts={accounts} web3={web3} back={openAddItemsPage} />
+      ) : (
+        <div className="App">
+          <button className='btn-addItem' onClick={openAddItemsPage}>
+            <FontAwesomeIcon icon={faPlus} size="2x" />
+          </button>
+          <div className="feed">
+            {items.map((item, index) => (
+              <AuctionItem key={index} item={item} contract={contract} accounts={accounts} web3={web3} />
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
+  
 }
 
 export default App;

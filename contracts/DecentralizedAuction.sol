@@ -30,6 +30,8 @@ contract DecentralizedAuction {
         addItem("Sword", "https://www.swordsantiqueweapons.com/images/s2331b.jpg", 3 ether, 10 ether, 1 minutes);
         addItem("Flintlock", "https://www.hemswell-antiques.com/uploads/media/news/0001/95/thumb_94739_news_wide.jpeg", 3 ether, 10 ether, 3 minutes);
         addItem("James Bond's DB5", "https://www.007.com/wp-content/uploads/2022/08/LCC-LS.jpg", 3 ether, 10 ether, 5 minutes);
+        addItem("Commodore PET", "https://i.redd.it/vimn3vih8b081.jpg", 3 ether, 10 ether, 5 minutes);
+        addItem("HP Palmtop", "https://i.pcmag.com/imagery/lineupitems/06sRck1AimbfOxWwRYvEBqX.fit_lim.size_1050x578.v1569508748.jpg", 3 ether, 10 ether, 5 minutes);
     }
 
     function addItem(string memory name, string memory imageUrl, uint minBid, uint buyoutPrice, uint biddingTime) public {

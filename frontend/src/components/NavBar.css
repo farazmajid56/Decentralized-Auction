@@ -13,7 +13,24 @@
 }
 
 .btn-user-auctions {
-  /* Ensures the button container is aligned to the left */
+  
+}
+
+#btn-user-auctions-txt{
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+.icon-button {
+  background: none;
+  border: none;
+  color: inherit; /* Inherits the white color from the parent */
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  color: #ffffff; /* Changes color on hover to give feedback */
 }
 
 .user-info {
@@ -36,4 +53,8 @@
   font-size: 20px;
   font-weight: bold;
   margin: 0px;
+}
+
+#walletAdd{
+  font-size: 14px;
 }

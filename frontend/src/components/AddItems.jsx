@@ -39,6 +39,7 @@ const AddItems = ({ web3, accounts, contract, back }) => {
     } catch (error) {
       alert('Failed to add item. Error: ' + error.message);
     }
+    back();
   };
 
   return (
@@ -64,7 +65,7 @@ const AddItems = ({ web3, accounts, contract, back }) => {
         Bidding Time (minutes):
         <input type="number" value={biddingTime} onChange={(e) => setBiddingTime(e.target.value)} required />
       </label>
-      <button type="submit" onClick={back}>Add Item</button>
+      <button type="submit" onClick={handleSubmit}>Add Item</button>
     </form>
   );
 };

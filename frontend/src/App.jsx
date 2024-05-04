@@ -54,9 +54,8 @@ function App() {
       }
       setItems(items);
     };
-
     initWeb3();
-  }, []);
+  }, [isOpenAddItemsPage]);
 
   const toggleAddItemsPage = () => {
       setisOpenAddItemsPage(prevState => !prevState);

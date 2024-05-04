@@ -1,16 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Login.css';
 
-const Login = ({ onLogin }) => {
-    const [name, setName] = useState('');
+const Login = ({ contract, accounts, onLogin }) => {
+    const [username, setUsername] = useState('');
+    const [existingUser, setexistingUser] = useState(false);
 
-    const handleInputChange = (event) => {
-        setName(event.target.value);
+    useEffect(() => checkUserExists(), [])
+
+    const connectWallet = async () => {
+        if (window.ethereum) {
+            const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            if(!existingUser){
+                await contract.methods.registerUser(username).send({ from: account });
+            }
+            onLogin();
+        } else {
+            alert('Please install MetaMask!');
+        }
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        onLogin();
+    const checkUserExists = async (account) => {
+        const isRegistered = await contract.methods.getUser(account).call();
+        if (isRegistered) {
+            setexistingUser(true);
+        } else {
+            setexistingUser(false);
+            const name = prompt('Please enter your username for registration:');
+            await contract.methods.registerUser(username).send({ from: account });
+        }
     };
 
     return (
@@ -18,23 +35,21 @@ const Login = ({ onLogin }) => {
             <header className="login-header">
                 Welcome to Decentralized Auction House
             </header>
-            <form onSubmit={handleSubmit} className="login-form">
-                <label htmlFor="name" className="login-label">Enter your name:</label>
-                <input
-                    type="text"
-                    id="name"
-                    value={name}
-                    onChange={handleInputChange}
-                    className="login-input"
-                    placeholder="Your Name"
-                    required
-                />
-                <button type="submit" className="login-button">Continue</button>
-            </form>
+            
+            { !existingUser && 
+                <> 
+                <h1>Please register you account</h1> 
+                <input value={username} className="login-input" onChange={(e) => setUsername(e.target.value)} />
+                </>
+            }
+
+            <button className="login-button" onClick={connectWallet}>Connect Wallet</button>
+
             <footer className="login-footer">
                 By Faraz Majid 20L-1162 & Aemon Fatima 20L-1057
             </footer>
         </div>
+    
     );
 };
 

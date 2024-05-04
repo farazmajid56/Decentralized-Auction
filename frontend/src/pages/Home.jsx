@@ -7,11 +7,11 @@ import AddItems from '../components/AddItems'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-const Home = ({items, contract, accounts, web3, isOpenAddItemsPage, toggleAddItemsPage}) =>{
+const Home = ({ items, contract, accounts, web3, isOpenAddItemsPage, toggleAddItemsPage, username, walletAddress }) =>{
 
     return(
         <>
-        <NavBar />
+        <NavBar username = {username} walletAddress = {walletAddress}/>
         {isOpenAddItemsPage ? (
             <AddItems 
             contract={contract} 

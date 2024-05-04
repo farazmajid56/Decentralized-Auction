@@ -14,6 +14,7 @@ function App() {
   const [isLoggedIn, setisLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [existingUser, setExistingUser] = useState(false);
+  const [walletAddress, setwalletAddress] = useState('');
 
   useEffect(() => {
     const initWeb3 = async () => {
@@ -70,6 +71,7 @@ function App() {
           setUsername = {setUsername} 
           existingUser = {existingUser} 
           setExistingUser = {setExistingUser}
+          setwalletAddress = {setwalletAddress}
         />
         : 
         <Home 
@@ -79,6 +81,8 @@ function App() {
           web3 = {web3} 
           toggleAddItemsPage = {toggleAddItemsPage} 
           isOpenAddItemsPage = {isOpenAddItemsPage}
+          username = {username}
+          walletAddress = {walletAddress}
         />
       }
     </>

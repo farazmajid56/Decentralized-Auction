@@ -67,7 +67,7 @@ function App() {
   return (
     <>
       {!isLoggedIn ? (
-        <Login onLogin={toggleisLoggedIn} />
+        <Login contract={contract} onLogin={toggleisLoggedIn} />
       ) : (
         <>
           <NavBar />

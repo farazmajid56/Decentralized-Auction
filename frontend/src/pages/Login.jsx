@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
 import './Login.css';
+import React, { useEffect, useState } from 'react';
 
-const Login = ({ contract, accounts, onLogin }) => {
-    const [username, setUsername] = useState('');
-    const [existingUser, setExistingUser] = useState(false);
+const Login = ({ contract, accounts, onLogin, username, setUsername, existingUser, setExistingUser }) => {
 
     useEffect(() => {
         // Define the async function inside useEffect
@@ -12,6 +10,10 @@ const Login = ({ contract, accounts, onLogin }) => {
                 alert('Please install MetaMask!');
                 return;
             }
+            if (!contract) {
+                console.error('Contract not loaded');
+                return; // Early return if contract is not loaded
+            }            
             const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
             const isRegistered = await contract.methods.getUser(account[0]).call();
             if (isRegistered) {
@@ -23,9 +25,9 @@ const Login = ({ contract, accounts, onLogin }) => {
                 setUsername(name);
             }
         }
-        
+
         checkUserExists();
-    }, []); // Dependencies should include all variables used in the effect that could change over time
+    }, [contract]); // Dependencies should include all variables used in the effect that could change over time
 
     const connectWallet = async () => {
         if (!window.ethereum) {
@@ -53,7 +55,7 @@ const Login = ({ contract, accounts, onLogin }) => {
                     </label>
                 </>
                 :
-                <h1 className="register-heading">Welcomeback</h1> 
+                <h1 className="register-heading">Welcome back</h1> 
             }
 
             <button className="login-button" onClick={connectWallet}>Connect Wallet</button>

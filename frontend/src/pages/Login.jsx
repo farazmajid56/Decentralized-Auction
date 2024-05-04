@@ -20,6 +20,7 @@ const Login = ({ contract, onLogin, username, setUsername, existingUser, setExis
                 if (isRegistered) {
                     setUsername(isRegistered.username)
                     setExistingUser(true);
+                    onLogin();
                 } else {
                     setExistingUser(false);
                     // Prompting before setting username might lead to better flow control

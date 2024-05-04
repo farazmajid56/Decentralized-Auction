@@ -15,9 +15,17 @@ contract DecentralizedAuction {
         bool ended;
     }
 
+    struct User {
+        string username;
+        address walletAddress;
+    }
+
     Item[] public items;
+    mapping(address => User) public users;
+    mapping(address => bool) public registered;
     mapping(address => uint) public pendingReturns;
 
+    event UserRegistered(address userAddress, string username);
     event AuctionCreated(uint itemId, string name, uint minBid, uint buyoutPrice, uint auctionEndTime);
     event HighestBidIncreased(uint itemId, address bidder, uint amount);
     event AuctionEnded(uint itemId, address winner, uint amount);
@@ -32,6 +40,18 @@ contract DecentralizedAuction {
         addItem("James Bond's DB5", "https://www.007.com/wp-content/uploads/2022/08/LCC-LS.jpg", 3 ether, 10 ether, 5 minutes);
         addItem("Commodore PET", "https://i.redd.it/om995fq8j8ua1.jpg", 3 ether, 10 ether, 5 minutes);
         addItem("HP Palmtop", "https://i.pcmag.com/imagery/lineupitems/06sRck1AimbfOxWwRYvEBqX.fit_lim.size_1050x578.v1569508748.jpg", 3 ether, 10 ether, 5 minutes);
+    }
+
+    function registerUser(string memory _username) public {
+        require(!registered[msg.sender], "User already registered.");
+        users[msg.sender] = User(_username, msg.sender);
+        registered[msg.sender] = true;
+        emit UserRegistered(msg.sender, _username);
+    }
+
+    function getUser(address _userAddress) public view returns (User memory) {
+        require(registered[_userAddress], "User not registered.");
+        return users[_userAddress];
     }
 
     function addItem(string memory name, string memory imageUrl, uint minBid, uint buyoutPrice, uint biddingTime) public {
@@ -101,12 +121,10 @@ contract DecentralizedAuction {
     }
 
     function timeLeft(uint itemId) public view returns (uint) {
-    Item storage item = items[itemId];
-    if (block.timestamp >= item.auctionEndTime) {
-        return 0;
+        Item storage item = items[itemId];
+        if (block.timestamp >= item.auctionEndTime) {
+            return 0;
+        }
+        return item.auctionEndTime - block.timestamp;
     }
-    return item.auctionEndTime - block.timestamp;
-}
-
-
 }

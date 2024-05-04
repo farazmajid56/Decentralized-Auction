@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from 'react';
 import './App.css';
 import Web3 from 'web3';
+import React, { useEffect, useState } from 'react';
 
-import AuctionItem from './components/AuctionItem'; // Component for auction items
-import NavBar from './components/NavBar';
-import AddItems from './components/AddItems'
+import Home from './pages/Home'
 import Login from './pages/Login'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-
 
 function App() {
   const [web3, setWeb3] = useState(null);
@@ -18,6 +12,8 @@ function App() {
   const [items, setItems] = useState([]);
   const [isOpenAddItemsPage, setisOpenAddItemsPage] = useState(false);
   const [isLoggedIn, setisLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
+  const [existingUser, setExistingUser] = useState(false);
 
   useEffect(() => {
     const initWeb3 = async () => {
@@ -61,43 +57,30 @@ function App() {
       setisOpenAddItemsPage(prevState => !prevState);
   }
   const toggleisLoggedIn = () => {
-    setisLoggedIn(prevState => !prevState);
+    setisLoggedIn(true);
   }
 
   return (
     <>
-      {!isLoggedIn ? (
-        <Login contract={contract} onLogin={toggleisLoggedIn} />
-      ) : (
-        <>
-          <NavBar />
-          {isOpenAddItemsPage ? (
-            <AddItems 
-              contract={contract} 
-              accounts={accounts} 
-              web3={web3} 
-              back={toggleAddItemsPage} 
-            />
-          ) : (
-            <div className="App">
-              <button className='btn-addItem' onClick={toggleAddItemsPage}>
-                <FontAwesomeIcon icon={faPlus} size="2x" />
-              </button>
-              <div className="feed">
-                {items.map((item, index) => (
-                  <AuctionItem 
-                    key={index} 
-                    item={item} 
-                    contract={contract} 
-                    accounts={accounts} 
-                    web3={web3} 
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-        </>
-      )}
+      {!isLoggedIn ? 
+        <Login 
+          contract={contract} 
+          onLogin={toggleisLoggedIn} 
+          username = {username} 
+          setUsername = {setUsername} 
+          existingUser = {existingUser} 
+          setExistingUser = {setExistingUser}
+        />
+        : 
+        <Home 
+          items = {items} 
+          contract = {contract} 
+          accounts = {accounts} 
+          web3 = {web3} 
+          toggleAddItemsPage = {toggleAddItemsPage} 
+          isOpenAddItemsPage = {isOpenAddItemsPage}
+        />
+      }
     </>
   );  
 }

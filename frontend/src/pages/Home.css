@@ -1,0 +1,24 @@
+.feed {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 20px;
+  }
+  
+.btn-addItem {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 75px;       /* Ensure a fixed width */
+    height: 75px;      /* Ensure a fixed height */
+    display: flex;     /* Flex to center the icon */
+    align-items: center; /* Center align icon vertically */
+    justify-content: center; /* Center align icon horizontally */
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 50%;   /* Perfect circle */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }

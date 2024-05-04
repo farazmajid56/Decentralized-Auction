@@ -1,6 +1,6 @@
 .header-container {
   display: flex;             /* Enables flexbox layout */
-  justify-content: space-between; /* Distributes space between elements */
+  justify-content: space-around; /* Distributes space between elements */
   align-items: center;       /* Vertically centers the items */
   background-color: #333;
   color: #fff;
@@ -10,6 +10,7 @@
 .title-bar {
   flex-grow: 1;              /* Allows the title bar to grow and take up available space for centering */
   text-align: center;
+  margin-left: 220px;
 }
 
 .btn-user-auctions {

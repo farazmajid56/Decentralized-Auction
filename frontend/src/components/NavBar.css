@@ -1,6 +1,39 @@
+.header-container {
+  display: flex;             /* Enables flexbox layout */
+  justify-content: space-between; /* Distributes space between elements */
+  align-items: center;       /* Vertically centers the items */
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+}
+
 .title-bar {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
-  }
+  flex-grow: 1;              /* Allows the title bar to grow and take up available space for centering */
+  text-align: center;
+}
+
+.btn-user-auctions {
+  /* Ensures the button container is aligned to the left */
+}
+
+.user-info {
+  display: flex;             /* Continue using flexbox */
+  align-items: center;       /* Align items vertically in the center */
+  padding: 20px;             /* Padding around the container */
+}
+
+.user-details {
+  display: flex;             /* Uses flexbox for the details layout */
+  flex-direction: column;    /* Stacks children (username and wallet) vertically */
+  align-items: flex-start;   /* Aligns text to the start (left) of their container */
+  margin-left: 10px;         /* Space between icon and text details */
+  text-align: left;
+  margin-top: 18px;
+  margin-left: 20px;          /* Text aligned to the left */
+}
+
+#userName{
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0px;
+}

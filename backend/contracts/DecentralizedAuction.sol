@@ -127,4 +127,28 @@ contract DecentralizedAuction {
         }
         return item.auctionEndTime - block.timestamp;
     }
+
+    function getAllUserItems() public view returns (Item[] memory) {
+        require(!registered[msg.sender], "User not registered.");
+
+        // Count the user's items
+        uint count = 0;
+        for (uint index = 0; index < items.length; index++) {
+            if (items[index].seller == msg.sender) {
+                count++;
+            }
+        }
+
+        Item[] memory list = new Item[](count);
+
+        uint counter = 0;
+        for (uint index = 0; index < items.length; index++) {
+            if (items[index].seller == msg.sender) {
+                list[counter] = items[index];
+                counter++;
+            }
+        }
+
+        return list;
+    }
 }

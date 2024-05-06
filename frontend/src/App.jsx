@@ -65,7 +65,7 @@ function App() {
       setItems(items);
     };
     initWeb3();
-  }, [isOpenAddItemsPage,walletAddress]);
+  }, [isOpenAddItemsPage,walletAddress,existingUser,toggleFeed,isLoggedIn,userItems,items]);
 
   const toggleAddItemsPage = () => {
       setisOpenAddItemsPage(prevState => !prevState);

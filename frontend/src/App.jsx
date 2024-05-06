@@ -15,6 +15,8 @@ function App() {
   const [username, setUsername] = useState('');
   const [existingUser, setExistingUser] = useState(false);
   const [walletAddress, setwalletAddress] = useState('');
+  const [toggleFeed, setToggleFeed] = useState(true);
+  const [userItems, setuserItems] = useState([]);
 
   useEffect(() => {
     const initWeb3 = async () => {
@@ -49,16 +51,30 @@ function App() {
         const item = await contractInstance.methods.items(i).call();
         items.push(item);
       }
+      try {
+        let _userItems = await contractInstance.methods.getAllUserItems().call()
+        console.log(_userItems);
+        console.log(walletAddress);
+        console.log(items[8].seller)
+        _userItems = items.filter( x => x.seller == walletAddress);
+        console.log(_userItems);
+        setuserItems(_userItems);
+      } catch (error) {
+        console.log("Unable to Fetch User Items")
+      }
       setItems(items);
     };
     initWeb3();
-  }, [isOpenAddItemsPage]);
+  }, [isOpenAddItemsPage,walletAddress]);
 
   const toggleAddItemsPage = () => {
       setisOpenAddItemsPage(prevState => !prevState);
   }
   const toggleisLoggedIn = () => {
     setisLoggedIn(true);
+  }
+  const openUserAuctions = () => {
+    setToggleFeed(prevState => !prevState);
   }
 
   return (
@@ -76,6 +92,7 @@ function App() {
         : 
         <Home 
           items = {items} 
+          userItems = {userItems}
           contract = {contract} 
           accounts = {accounts} 
           web3 = {web3} 
@@ -83,6 +100,8 @@ function App() {
           isOpenAddItemsPage = {isOpenAddItemsPage}
           username = {username}
           walletAddress = {walletAddress}
+          openUserAuctions = {openUserAuctions}
+          toggleFeed={toggleFeed}
         />
       }
     </>

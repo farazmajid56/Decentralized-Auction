@@ -1,5 +1,5 @@
-import './Login.css';
 import React, { useEffect, useState } from 'react';
+import './Login.css';
 
 const Login = ({ contract, onLogin, username, setUsername, existingUser, setExistingUser, setwalletAddress }) => {
 
@@ -20,14 +20,17 @@ const Login = ({ contract, onLogin, username, setUsername, existingUser, setExis
                 if (isRegistered) {
                     setUsername(isRegistered.username)
                     setExistingUser(true);
+                    console.log(isRegistered);
+                    console.log(account);
                     onLogin();
                 } else {
                     setExistingUser(false);
                     // Prompting before setting username might lead to better flow control
-                    const name = prompt('Please enter your username for registration:');
-                    setUsername(name);
+                    //const name = prompt('Please enter your username for registration:');
+                    //setUsername(name);
+                    console.log("Register User Here")
                 }
-                setwalletAddress(account[0]);
+                setwalletAddress(isRegistered.walletAddress);
             } catch (error) {
                 console.error('Error checking if user exists:', error);
                 // Handle specific error scenarios if needed

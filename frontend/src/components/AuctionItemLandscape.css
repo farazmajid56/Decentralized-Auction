@@ -1,0 +1,35 @@
+/* AuctionItemLandscape.css */
+
+.auction-item-landscape {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    max-width: 600px;
+}
+
+.auction-item-landscape-image {
+    width: 40%;
+    object-fit: cover;
+    border-right: 1px solid #ccc;
+}
+
+.auction-item-landscape-info {
+    padding: 16px;
+    flex-grow: 1;
+}
+
+.auction-item-landscape-info h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.auction-item-landscape-info p {
+    margin: 16px 0;
+    font-size: 18px;
+    color: #555;
+}

@@ -2,11 +2,11 @@ import './NavBar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle, faGavel } from '@fortawesome/free-solid-svg-icons';
 
-const NavBar = ({ username, walletAddress }) => {
+const NavBar = ({ username, walletAddress, openUserAuctions }) => {
     return (
         <div className="header-container">
             <div className="btn-user-auctions">
-                <button className="icon-button" onClick={() => alert('Navigate to your auctions')}>
+                <button className="icon-button" onClick={openUserAuctions}>
                     <FontAwesomeIcon icon={faGavel} size="2x" />
                     <p id="btn-user-auctions-txt">Your Auctions</p>
                 </button>

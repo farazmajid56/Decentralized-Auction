@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Web3 from 'web3';
 import './AddItems.css'
 
-const AddItems = ({ web3, accounts, contract, back }) => {
+const AddItems = ({ web3, accounts, contract, back, walletAddress }) => {
   const [name, setName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [minBid, setMinBid] = useState('');
@@ -20,6 +20,14 @@ const AddItems = ({ web3, accounts, contract, back }) => {
     try {
       // Convert biddingTime to seconds (if entered in minutes)
       const biddingTimeInSeconds = biddingTime * 60;
+
+      // await contract.methods.addItem(
+      //   name,
+      //   imageUrl,
+      //   Web3.utils.toWei(minBid, 'ether'), // Assuming minBid and buyoutPrice are in Ether
+      //   Web3.utils.toWei(buyoutPrice, 'ether'),
+      //   biddingTimeInSeconds
+      // ).send({ from: accounts[0] });
 
       await contract.methods.addItem(
         name,

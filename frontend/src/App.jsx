@@ -38,12 +38,16 @@ function App() {
 
     const loadContract = async (web3) => {
       const contractData = require('./DecentralizedAuction.json'); // Path to JSON file
+      
       const networkId = await web3.eth.net.getId();
+      
       const deployedNetwork = contractData.networks[networkId];
+      
       const contractInstance = new web3.eth.Contract(
         contractData.abi,
         deployedNetwork && deployedNetwork.address,
       );
+
       setContract(contractInstance);
       const itemsCount = await contractInstance.methods.itemsCount().call();
       const items = [];
@@ -52,20 +56,23 @@ function App() {
         items.push(item);
       }
       try {
-        let _userItems = await contractInstance.methods.getAllUserItems().call()
-        console.log(_userItems);
+        //let _userItems = await contractInstance.methods.getAllUserItems().call()
+
         console.log(walletAddress);
-        console.log(items[8].seller)
-        _userItems = items.filter( x => x.seller == walletAddress);
+        let _userItems = items.filter(x => x.seller == walletAddress);
+
+        console.log("_userItems")
         console.log(_userItems);
         setuserItems(_userItems);
+        
       } catch (error) {
         console.log("Unable to Fetch User Items")
+        console.log(error)
       }
       setItems(items);
     };
     initWeb3();
-  }, [isOpenAddItemsPage,walletAddress,existingUser,toggleFeed,isLoggedIn,userItems,items]);
+  }, [isOpenAddItemsPage,walletAddress,existingUser,toggleFeed,isLoggedIn,items]);
 
   const toggleAddItemsPage = () => {
       setisOpenAddItemsPage(prevState => !prevState);
@@ -78,8 +85,26 @@ function App() {
   }
   const withdrawRefunds = async () => {
     const success = await contract.methods.withdraw().call();
+    alert(success ? "Withdraw Successful" : "Withdraw Failed");
     console.log( success ? "Withdraw Successful" : "Withdraw Failed");
   }
+  const endAuction = async (id) => {
+      try {
+          // Call the endAuction method in the smart contract
+          const success = await contract.methods.endAuction(id).call();
+
+          if (success) {
+              // Update the local state
+              setItems((prevItems) =>
+                  prevItems.map((item) =>
+                      item.id === id ? { ...item, ended: true } : item
+                  )
+              );
+          }
+      } catch (error) {
+          console.error('Error ending the auction:', error);
+      }
+  };
   
   return (
     <>
@@ -107,6 +132,7 @@ function App() {
           openUserAuctions = {openUserAuctions}
           toggleFeed = {toggleFeed}
           withdrawRefunds = {withdrawRefunds}
+          endAuction = {endAuction}
         />
       }
     </>

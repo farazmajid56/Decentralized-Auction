@@ -31,16 +31,16 @@ contract DecentralizedAuction {
     event HighestBidIncreased(uint itemId, address bidder, uint amount);
     event AuctionEnded(uint itemId, address winner, uint amount);
     event ItemBoughtOut(uint itemId, address buyer, uint amount);
-
+    
     constructor() {
-        addItem("Vintage Phone", "https://m.media-amazon.com/images/I/71tQC-279uL.jpg", 1 ether, 5 ether, 180 minutes);
-        addItem("Record Player", "https://ii1.pepperfry.com/media/catalog/product/g/o/494x544/gold-brass-and-wood-embossed-horn-and-gramophone-by-exim-decor-gold-brass-and-wood-embossed-horn-and-fjizt5.jpg", 2 ether, 7 ether, 180 minutes);
-        addItem("Aladdin Movie Prop", "https://multiwood.com.pk/cdn/shop/products/Picsart_22-10-23_03-53-33-812_1000x1000.jpg?v=1666479726", 3 ether, 10 ether, 180 minutes);
-        addItem("Sword", "https://www.swordsantiqueweapons.com/images/s2331b.jpg", 3 ether, 10 ether, 1 minutes);
-        addItem("Flintlock", "https://www.hemswell-antiques.com/uploads/media/news/0001/95/thumb_94739_news_wide.jpeg", 3 ether, 10 ether, 3 minutes);
-        addItem("James Bond's DB5", "https://www.007.com/wp-content/uploads/2022/08/LCC-LS.jpg", 3 ether, 10 ether, 5 minutes);
-        addItem("Commodore PET", "https://i.redd.it/om995fq8j8ua1.jpg", 3 ether, 10 ether, 5 minutes);
-        addItem("HP Palmtop", "https://i.pcmag.com/imagery/lineupitems/06sRck1AimbfOxWwRYvEBqX.fit_lim.size_1050x578.v1569508748.jpg", 3 ether, 10 ether, 5 minutes);
+        // addItem("Vintage Phone", "https://m.media-amazon.com/images/I/71tQC-279uL.jpg", 1 ether, 5 ether, 180 minutes);
+        // addItem("Record Player", "https://ii1.pepperfry.com/media/catalog/product/g/o/494x544/gold-brass-and-wood-embossed-horn-and-gramophone-by-exim-decor-gold-brass-and-wood-embossed-horn-and-fjizt5.jpg", 2 ether, 7 ether, 180 minutes);
+        // addItem("Aladdin Movie Prop", "https://multiwood.com.pk/cdn/shop/products/Picsart_22-10-23_03-53-33-812_1000x1000.jpg?v=1666479726", 3 ether, 10 ether, 180 minutes);
+        // addItem("Sword", "https://www.swordsantiqueweapons.com/images/s2331b.jpg", 3 ether, 10 ether, 1 minutes);
+        // addItem("Flintlock", "https://www.hemswell-antiques.com/uploads/media/news/0001/95/thumb_94739_news_wide.jpeg", 3 ether, 10 ether, 3 minutes);
+        // addItem("James Bond's DB5", "https://www.007.com/wp-content/uploads/2022/08/LCC-LS.jpg", 3 ether, 10 ether, 5 minutes);
+        // addItem("Commodore PET", "https://i.redd.it/om995fq8j8ua1.jpg", 3 ether, 10 ether, 5 minutes);
+        // addItem("HP Palmtop", "https://i.pcmag.com/imagery/lineupitems/06sRck1AimbfOxWwRYvEBqX.fit_lim.size_1050x578.v1569508748.jpg", 3 ether, 10 ether, 5 minutes);
     }
 
     function registerUser(string memory _username) public {
@@ -74,15 +74,39 @@ contract DecentralizedAuction {
     }
 
     function bid(uint itemId) public payable {
+        require(itemId < items.length, "Invalid Item ID");
         Item storage item = items[itemId];
         //require(block.timestamp < item.auctionEndTime, "Auction already ended.");
+        require(!items[itemId].ended, "Auction already ended.");
         require(msg.value > item.highestBid, "There already is a higher bid.");
+        require(msg.value < item.buyoutPrice, "Bid can not be higher than buyout");
+
         if (item.highestBidder != address(0)) {
             pendingReturns[item.highestBidder] += item.highestBid;
         }
+
         item.highestBidder = msg.sender;
         item.highestBid = msg.value;
+
         emit HighestBidIncreased(itemId, msg.sender, msg.value);
+    }
+
+
+    function buyout(uint itemId) public payable {
+        require(itemId < items.length, "Invalid Item ID");
+        Item storage item = items[itemId];
+        //require(block.timestamp < item.auctionEndTime, "Auction already ended.");
+        require(!items[itemId].ended, "Auction already ended.");
+        require(msg.value >= item.buyoutPrice, "Buyout price not met.");
+        
+        item.ended = true;
+        //item.auctionEndTime = block.timestamp;
+        
+        pendingReturns[item.highestBidder] += item.highestBid;
+
+        item.seller.transfer(msg.value);
+        
+        emit ItemBoughtOut(itemId, msg.sender, msg.value);
     }
 
     function withdraw() public returns (bool) {
@@ -97,19 +121,9 @@ contract DecentralizedAuction {
         return true;
     }
 
-    function buyout(uint itemId) public payable {
-        Item storage item = items[itemId];
-        //require(block.timestamp < item.auctionEndTime, "Auction already ended.");
-        require(!items[itemId].ended, "Auction already ended.");
-        require(msg.value >= item.buyoutPrice, "Buyout price not met.");
-        item.ended = true;
-        //item.auctionEndTime = block.timestamp;
-        item.seller.transfer(msg.value);
-        emit ItemBoughtOut(itemId, msg.sender, msg.value);
-    }
-
     function endAuction(uint itemId) public {
         Item storage item = items[itemId];
+        require(msg.sender == item.seller,"You are not the seller of this Auction");
         //require(block.timestamp >= item.auctionEndTime, "Auction not yet ended.");
         require(!item.ended, "Auction end has already been called.");
         item.ended = true;
@@ -131,8 +145,9 @@ contract DecentralizedAuction {
     //     return item.auctionEndTime - block.timestamp;
     // }
 
+    // Retrieve all user items
     function getAllUserItems() public view returns (Item[] memory) {
-        require(!registered[msg.sender], "User not registered.");
+        require(registered[msg.sender], "User not registered.");
 
         // Count the user's items
         uint count = 0;
@@ -142,6 +157,7 @@ contract DecentralizedAuction {
             }
         }
 
+        // Allocate a memory array for the user's items
         Item[] memory list = new Item[](count);
 
         uint counter = 0;

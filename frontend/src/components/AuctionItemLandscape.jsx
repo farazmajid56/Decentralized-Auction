@@ -1,7 +1,7 @@
 import React from 'react';
 import './AuctionItemLandscape.css';
 
-function AuctionItemLandscape({ web3, item }) {
+function AuctionItemLandscape({ web3, item, endAuction }) {
     const { imageUrl, name, highestBid, buyoutPrice, ended } = item;
 
     return (
@@ -12,6 +12,7 @@ function AuctionItemLandscape({ web3, item }) {
                 <p>Current Bid: {Number(web3.utils.fromWei(highestBid,'ether'))} AUC</p>
                 <p>Buyout price: {Number(web3.utils.fromWei(buyoutPrice, 'ether'))} AUC</p>
                 <p>Status: {ended ? "Ended": "Active"}</p>
+                <button className="end-auction-button" onClick={() => endAuction(item.id)}>End Auction</button>
             </div>
         </div>
     );

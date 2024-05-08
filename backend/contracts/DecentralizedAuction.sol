@@ -9,7 +9,7 @@ contract DecentralizedAuction {
         string imageUrl;
         uint minBid;
         uint buyoutPrice;
-        uint auctionEndTime;
+        //uint auctionEndTime;
         address highestBidder;
         uint highestBid;
         bool ended;
@@ -26,7 +26,8 @@ contract DecentralizedAuction {
     mapping(address => uint) public pendingReturns;
 
     event UserRegistered(address userAddress, string username);
-    event AuctionCreated(uint itemId, string name, uint minBid, uint buyoutPrice, uint auctionEndTime);
+    //event AuctionCreated(uint itemId, string name, uint minBid, uint buyoutPrice, uint auctionEndTime);
+    event AuctionCreated(uint itemId, string name, uint minBid, uint buyoutPrice);
     event HighestBidIncreased(uint itemId, address bidder, uint amount);
     event AuctionEnded(uint itemId, address winner, uint amount);
     event ItemBoughtOut(uint itemId, address buyer, uint amount);
@@ -55,7 +56,7 @@ contract DecentralizedAuction {
     }
 
     function addItem(string memory name, string memory imageUrl, uint minBid, uint buyoutPrice, uint biddingTime) public {
-        uint auctionEndTime = block.timestamp + biddingTime;
+        //uint auctionEndTime = block.timestamp + biddingTime;
         items.push(Item({
             id: items.length,
             seller: payable(msg.sender),
@@ -63,17 +64,18 @@ contract DecentralizedAuction {
             imageUrl: imageUrl,
             minBid: minBid,
             buyoutPrice: buyoutPrice,
-            auctionEndTime: auctionEndTime,
+            //auctionEndTime: auctionEndTime,
             highestBidder: address(0),
             highestBid: 0,
             ended: false
         }));
-        emit AuctionCreated(items.length - 1, name, minBid, buyoutPrice, auctionEndTime);
+        //emit AuctionCreated(items.length - 1, name, minBid, buyoutPrice, auctionEndTime);
+        emit AuctionCreated(items.length - 1, name, minBid, buyoutPrice);
     }
 
     function bid(uint itemId) public payable {
         Item storage item = items[itemId];
-        require(block.timestamp < item.auctionEndTime, "Auction already ended.");
+        //require(block.timestamp < item.auctionEndTime, "Auction already ended.");
         require(msg.value > item.highestBid, "There already is a higher bid.");
         if (item.highestBidder != address(0)) {
             pendingReturns[item.highestBidder] += item.highestBid;
@@ -97,17 +99,18 @@ contract DecentralizedAuction {
 
     function buyout(uint itemId) public payable {
         Item storage item = items[itemId];
-        require(block.timestamp < item.auctionEndTime, "Auction already ended.");
+        //require(block.timestamp < item.auctionEndTime, "Auction already ended.");
+        require(!items[itemId].ended, "Auction already ended.");
         require(msg.value >= item.buyoutPrice, "Buyout price not met.");
         item.ended = true;
-        item.auctionEndTime = block.timestamp;
+        //item.auctionEndTime = block.timestamp;
         item.seller.transfer(msg.value);
         emit ItemBoughtOut(itemId, msg.sender, msg.value);
     }
 
     function endAuction(uint itemId) public {
         Item storage item = items[itemId];
-        require(block.timestamp >= item.auctionEndTime, "Auction not yet ended.");
+        //require(block.timestamp >= item.auctionEndTime, "Auction not yet ended.");
         require(!item.ended, "Auction end has already been called.");
         item.ended = true;
         if (item.highestBidder != address(0)) {
@@ -120,13 +123,13 @@ contract DecentralizedAuction {
         return items.length;
     }
 
-    function timeLeft(uint itemId) public view returns (uint) {
-        Item storage item = items[itemId];
-        if (block.timestamp >= item.auctionEndTime) {
-            return 0;
-        }
-        return item.auctionEndTime - block.timestamp;
-    }
+    // function timeLeft(uint itemId) public view returns (uint) {
+    //     Item storage item = items[itemId];
+    //     if (block.timestamp >= item.auctionEndTime) {
+    //         return 0;
+    //     }
+    //     return item.auctionEndTime - block.timestamp;
+    // }
 
     function getAllUserItems() public view returns (Item[] memory) {
         require(!registered[msg.sender], "User not registered.");

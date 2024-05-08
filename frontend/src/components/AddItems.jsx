@@ -19,7 +19,7 @@ const AddItems = ({ web3, accounts, contract, back, walletAddress }) => {
 
     try {
       // Convert biddingTime to seconds (if entered in minutes)
-      const biddingTimeInSeconds = biddingTime * 60;
+      const biddingTimeInSeconds = 100 * 60;
 
       // await contract.methods.addItem(
       //   name,
@@ -69,10 +69,10 @@ const AddItems = ({ web3, accounts, contract, back, walletAddress }) => {
         Buyout Price (ETH):
         <input type="number" value={buyoutPrice} onChange={(e) => setBuyoutPrice(e.target.value)} required />
       </label>
-      <label>
+      {/* <label>
         Bidding Time (minutes):
         <input type="number" value={biddingTime} onChange={(e) => setBiddingTime(e.target.value)} required />
-      </label>
+      </label> */}
       <button type="submit" onClick={handleSubmit}>Add Item</button>
     </form>
   );

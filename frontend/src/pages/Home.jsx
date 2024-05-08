@@ -30,6 +30,7 @@ const Home = ({ items, userItems, contract, accounts, web3, isOpenAddItemsPage, 
             <div className="App">
             <button className='btn-addItem' onClick={toggleAddItemsPage}>
                 <FontAwesomeIcon icon={faPlus} size="2x" />
+                Add Item
             </button>
 
             {

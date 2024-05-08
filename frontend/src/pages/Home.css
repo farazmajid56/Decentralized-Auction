@@ -5,23 +5,57 @@
     padding: 20px;
   }
   
-.btn-addItem {
+/* .btn-addItem {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 75px;       /* Ensure a fixed width */
-    height: 75px;      /* Ensure a fixed height */
-    display: flex;     /* Flex to center the icon */
-    align-items: center; /* Center align icon vertically */
-    justify-content: center; /* Center align icon horizontally */
+    width: 75px;       
+    height: 75px;      
+    display: flex;     
+    align-items: center; 
+    justify-content: center;
     background-color: #007BFF;
     color: white;
     border: none;
-    border-radius: 50%;   /* Perfect circle */
+    border-radius: 50%;   
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: background-color 0.3s;
-  }
+} */
+
+.btn-addItem {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 150px; /* Adjust width according to your preference */
+  height: 50px; /* Adjust height according to your preference */
+  display: flex;
+  align-items: center;
+  justify-content: space-between  ;
+  padding-left: 10px; /* Space for the icon */
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-addItem i {
+  margin-right: 10px; /* Space between the icon and text */
+  font-size: 20px; /* Adjust icon size according to your preference */
+}
+
+.btn-addItem span {
+  font-weight: bold;
+  font-size: 16px; /* Adjust font size according to your preference */
+}
+
+.btn-addItem:hover {
+  background-color: #0056b3;
+}
+
 
   .userAuction {
     display: flex;

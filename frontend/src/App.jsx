@@ -76,7 +76,11 @@ function App() {
   const openUserAuctions = () => {
     setToggleFeed(prevState => !prevState);
   }
-
+  const withdrawRefunds = async () => {
+    const success = await contract.methods.withdraw().call();
+    console.log( success ? "Withdraw Successful" : "Withdraw Failed");
+  }
+  
   return (
     <>
       {!isLoggedIn ? 
@@ -101,7 +105,8 @@ function App() {
           username = {username}
           walletAddress = {walletAddress}
           openUserAuctions = {openUserAuctions}
-          toggleFeed={toggleFeed}
+          toggleFeed = {toggleFeed}
+          withdrawRefunds = {withdrawRefunds}
         />
       }
     </>

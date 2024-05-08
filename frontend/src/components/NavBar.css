@@ -10,7 +10,7 @@
 .title-bar {
   flex-grow: 1;              /* Allows the title bar to grow and take up available space for centering */
   text-align: center;
-  margin-left: 220px;
+  margin-left: auto; /* 220px */
 }
 
 .btn-user-auctions {

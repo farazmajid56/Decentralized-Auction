@@ -3,7 +3,7 @@ form {
   flex-direction: column;
   max-width: 400px;
   margin: 20px auto;
-  padding: 20px;  /* This padding ensures space around the content inside the form */
+  padding: 20px; /* This padding ensures space around the content inside the form */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background: #fff;
   border-radius: 8px;
@@ -20,18 +20,41 @@ label {
 }
 
 input[type="text"],
-input[type="number"] {
+input[type="number"],
+select {
   width: calc(100% - 20px); /* Adjust width to account for padding */
   padding: 10px;
   margin-top: 5px;
   margin-right: auto; /* Aligns margin to both sides */
-  margin-left: auto;  /* Aligns margin to both sides */
+  margin-left: auto; /* Aligns margin to both sides */
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
+}
+
+select {
+  background-color: #fff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: relative;
+}
+
+select::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-style: solid;
+  border-width: 2px 2px 0 0;
+  transform: rotate(45deg);
+  position: absolute;
+  right: 10px;
+  top: 15px;
 }
 
 button {
-  padding: 20px;
+  padding: 10px; /* Adjusted padding for consistent spacing */
   font-size: 18px;
   font-weight: bold;
   color: #fff;
@@ -45,4 +68,15 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+button[type="button"] {
+  margin-top: 5px;
+  background-color: #28a745;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+button[type="button"]:hover {
+  background-color: #218838;
 }

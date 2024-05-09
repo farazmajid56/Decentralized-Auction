@@ -28,20 +28,20 @@ const Login = ({ contract, onLogin, username, setUsername, existingUser, setExis
                     // Prompting before setting username might lead to better flow control
                     //const name = prompt('Please enter your username for registration:');
                     //setUsername(name);
-                    console.log("Register User Here")
+                    //console.log("Register User Here")
                 }
                 setwalletAddress(isRegistered.walletAddress);
             } catch (error) {
-                console.error('Error checking if user exists:', error);
+                //console.error('Error checking if user exists:', error);
                 // Handle specific error scenarios if needed
                 if (error.code === 4001) {
                     // EIP-1193 user rejection error
-                    console.log('Please connect to MetaMask.');
+                    //console.log('Please connect to MetaMask.');
                 } else if (error.message.includes('Internal JSON-RPC error')) {
-                    console.log('A JSON-RPC error occurred. Please try again.');
+                    //console.log('A JSON-RPC error occurred. Please try again.');
                 } else {
                     // Generic error handling
-                    alert('An error occurred. Please try again later.');
+                    //alert('An error occurred. Please try again later.');
                 }
             }
         }

@@ -58,16 +58,16 @@ function App() {
       try {
         //let _userItems = await contractInstance.methods.getAllUserItems().call()
 
-        console.log(walletAddress);
+        // console.log(walletAddress);
         let _userItems = items.filter(x => x.seller == walletAddress);
 
-        console.log("_userItems")
-        console.log(_userItems);
+        // console.log("_userItems")
+        // console.log(_userItems);
         setuserItems(_userItems);
         
       } catch (error) {
-        console.log("Unable to Fetch User Items")
-        console.log(error)
+        //console.log("Unable to Fetch User Items")
+        //console.log(error)
       }
       setItems(items);
     };
@@ -84,15 +84,30 @@ function App() {
     setToggleFeed(prevState => !prevState);
   }
   const withdrawRefunds = async () => {
-    const success = await contract.methods.withdraw().call();
-    alert(success ? "Withdraw Successful" : "Withdraw Failed");
-    console.log( success ? "Withdraw Successful" : "Withdraw Failed");
+    try{
+      const success = await contract.methods.withdraw().send();
+      console.log("withdrawRefunds()")
+      console.log(Number(success))
+      alert("Withdraw Successful")
+    }catch(error){
+      console.log(error);
+      //console.log(success)
+      alert("Withdraw Failed")
+    }
+    //alert(success ? "Withdraw Successful" : "Withdraw Failed");
+    //console.log( success ? "Withdraw Successful" : "Withdraw Failed");
   }
   const endAuction = async (id) => {
       try {
           // Call the endAuction method in the smart contract
-          const success = await contract.methods.endAuction(id).call();
-
+          const success = await contract.methods.endAuction(id).send({
+            from: accounts[0],
+            value: web3.utils.toWei(1, 'ether')
+          });
+          console.log(`Wallet Address: ${walletAddress}`)
+          console.log(`endAuction(${id})`)
+          console.log(success)
+          //console.log(success.data.message)
           if (success) {
               // Update the local state
               setItems((prevItems) =>
@@ -102,7 +117,7 @@ function App() {
               );
           }
       } catch (error) {
-          console.error('Error ending the auction:', error);
+          console.warn('Error ending the auction:', error);
       }
   };
   

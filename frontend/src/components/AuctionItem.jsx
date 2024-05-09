@@ -2,7 +2,7 @@ import React from 'react';
 import './AuctionItem.css';
 import { useState } from 'react';
 
-function AuctionItem({ item, contract, accounts, web3 }) {
+function AuctionItem({ item, contract, accounts, web3, walletAddress }) {
 
   const [price,setPrice] = useState(web3.utils.fromWei(item.highestBid,'ether'));
   const [isExpired,setExpired] = useState(item.ended);
@@ -37,9 +37,13 @@ function AuctionItem({ item, contract, accounts, web3 }) {
       <p className="buyout-info">Buyout Price: {web3.utils.fromWei(item.buyoutPrice, 'ether')} AUC</p>
       
       <p className='status-active'>{isExpired ? "EXPIRED" : "ACTIVE"}</p>
-  
-      <button className="bid-button" onClick={() => placeBid(item.id)} disabled = {isExpired}>Place Bid</button>
-      <button className="buyout-button" onClick={() => buyout(item.id)} disabled = {isExpired}>Buy Now</button>
+      {
+        (item.seller != walletAddress) &&
+        <>
+          <button className="bid-button" onClick={() => placeBid(item.id)} disabled = {isExpired}>Place Bid</button>
+          <button className="buyout-button" onClick={() => buyout(item.id)} disabled = {isExpired}>Buy Now</button>
+        </>
+      }
     </div>
   );
 }

@@ -20,15 +20,15 @@ contract DecentralizedAuction {
         address walletAddress;
     }
 
-    // struct Refund{
-    //     address toWallet;
-    //     uint amount;
-    // }
+    struct Refund{
+        address toWallet;
+        uint amount;
+    }
 
     Item[] public items;
     mapping(address => User) public users;
     mapping(address => bool) public registered;
-    mapping(address => uint) public pendingReturns;
+    // mapping(address => Refund[]) public pendingReturns;
 
     event UserRegistered(address userAddress, string username);
     //event AuctionCreated(uint itemId, string name, uint minBid, uint buyoutPrice, uint auctionEndTime);
@@ -81,22 +81,28 @@ contract DecentralizedAuction {
     function bid(uint itemId) public payable {
         require(itemId < items.length, "Invalid Item ID");
         Item storage item = items[itemId];
-        //require(block.timestamp < item.auctionEndTime, "Auction already ended.");
-        require(!items[itemId].ended, "Auction already ended."); 
-        require(item.seller != msg.sender, "You can not bid on your own auction");
-        require(msg.value > item.highestBid, "There already is a higher bid.");
-        require(msg.value < item.buyoutPrice, "Bid can not be higher than buyout");
+        require(!item.ended, "Auction already ended");
+        require(item.seller != msg.sender, "You cannot bid on your own auction");
+        require(msg.value >= item.minBid, "Bid must be greater than or equal to minimum bid");
+        require(msg.value > item.highestBid, "There already is a higher bid");
+        require(msg.value < item.buyoutPrice, "Bid cannot be higher than buyout");
 
+        // Refund the previous highest bidder automatically
         if (item.highestBidder != address(0)) {
-            pendingReturns[item.highestBidder] += item.highestBid;
+            (bool success, ) = item.highestBidder.call{value: item.highestBid}("");
+            require(success, "Refund to previous highest bidder failed");
         }
 
-        item.highestBidder = msg.sender;
+        // Update the highest bidder and highest bid
+        item.highestBidder = payable(msg.sender);
         item.highestBid = msg.value;
 
-        item.seller.transfer(msg.value);
-
         emit HighestBidIncreased(itemId, msg.sender, msg.value);
+
+        // Check if the bid meets the buyout price
+        if (msg.value >= item.buyoutPrice) {
+            endAuction(itemId);
+        }
     }
 
 
@@ -110,36 +116,54 @@ contract DecentralizedAuction {
         item.ended = true;
         //item.auctionEndTime = block.timestamp;
         
-        pendingReturns[item.highestBidder] += item.highestBid;
+        // pendingReturns[item.highestBidder] += item.highestBid;
+
+        if (item.highestBidder != address(0)) {
+            (bool success, ) = item.highestBidder.call{value: item.highestBid}("");
+            require(success, "Refund to previous highest bidder failed");
+        }
 
         item.seller.transfer(msg.value);
         
         emit ItemBoughtOut(itemId, msg.sender, msg.value);
     }
 
-    function withdraw() public returns (uint) {
-        uint amount = pendingReturns[msg.sender];
-        if (amount > 0) {
-            pendingReturns[msg.sender] = 0;
-            if (!payable(msg.sender).send(amount)) {
-                pendingReturns[msg.sender] = amount;
-                return 0;
-            }
-        }
-        return amount;
+    // function withdraw() public returns (uint) {
+    //     uint amount = pendingReturns[msg.sender];
+    //     if (amount > 0) {
+    //         pendingReturns[msg.sender] = 0;
+    //         if (!payable(msg.sender).send(amount)) {
+    //             pendingReturns[msg.sender] = amount;
+    //             return 0;
+    //         }
+    //     }
+    //     return amount;
+    // }
+
+
+    function endAuction(uint itemId) internal {
+        Item storage item = items[itemId];
+        require(!item.ended, "Auction end has already been called");
+
+        item.ended = true;
+
+        // Transfer the highest bid amount to the seller
+        item.seller.transfer(item.highestBid);
+
+        emit AuctionEnded(itemId, item.highestBidder, item.highestBid);
     }
 
-    function endAuction(uint itemId) public {
+
+    // Function to manually end the auction
+    function manualEndAuction(uint itemId) public {
+        require(itemId < items.length, "Invalid Item ID");
         Item storage item = items[itemId];
-        //require(msg.sender == item.seller,"You are not the seller of this Auction");
-        //require(block.timestamp >= item.auctionEndTime, "Auction not yet ended.");
-        require(!item.ended, "Auction end has already been called.");
-        if (item.highestBid > 0) {
-            item.ended = true;
-            item.seller.transfer(item.highestBid);
-            emit AuctionEnded(itemId, item.highestBidder, item.highestBid);
-        }
+        require(msg.sender == item.seller, "Only the seller can end this auction");
+        require(!item.ended, "Auction already ended");
+
+        endAuction(itemId);
     }
+
 
     function itemsCount() public view returns (uint) {
         return items.length;

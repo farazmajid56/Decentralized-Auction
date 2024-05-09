@@ -83,27 +83,27 @@ function App() {
   const openUserAuctions = () => {
     setToggleFeed(prevState => !prevState);
   }
-  const withdrawRefunds = async () => {
-    try{
-      const success = await contract.methods.withdraw().send();
-      console.log("withdrawRefunds()")
-      console.log(Number(success))
-      alert("Withdraw Successful")
-    }catch(error){
-      console.log(error);
-      //console.log(success)
-      alert("Withdraw Failed")
-    }
-    //alert(success ? "Withdraw Successful" : "Withdraw Failed");
-    //console.log( success ? "Withdraw Successful" : "Withdraw Failed");
-  }
+  // const withdrawRefunds = async () => {
+  //   try{
+  //     const success = await contract.methods.withdraw().send();
+  //     console.log("withdrawRefunds()")
+  //     console.log(Number(success))
+  //     alert("Withdraw Successful")
+  //   }catch(error){
+  //     console.log(error);
+  //     //console.log(success)
+  //     alert("Withdraw Failed")
+  //   }
+  //   //alert(success ? "Withdraw Successful" : "Withdraw Failed");
+  //   //console.log( success ? "Withdraw Successful" : "Withdraw Failed");
+  // }
   const endAuction = async (id) => {
       try {
           // Call the endAuction method in the smart contract
-          const success = await contract.methods.endAuction(id).send({
-            from: accounts[0],
-            value: web3.utils.toWei(1, 'ether')
+          const success = await contract.methods.manualEndAuction(id).send({
+            from: walletAddress
           });
+  
           console.log(`Wallet Address: ${walletAddress}`)
           console.log(`endAuction(${id})`)
           console.log(success)
@@ -146,7 +146,7 @@ function App() {
           walletAddress = {walletAddress}
           openUserAuctions = {openUserAuctions}
           toggleFeed = {toggleFeed}
-          withdrawRefunds = {withdrawRefunds}
+          //withdrawRefunds = {withdrawRefunds}
           endAuction = {endAuction}
         />
       }

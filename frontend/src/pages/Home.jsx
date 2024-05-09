@@ -8,7 +8,7 @@ import AuctionItemLandscape from '../components/AuctionItemLandscape';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-const Home = ({ items, userItems, contract, accounts, web3, isOpenAddItemsPage, toggleAddItemsPage, username, walletAddress, openUserAuctions, toggleFeed, withdrawRefunds, endAuction }) =>{
+const Home = ({ items, userItems, contract, accounts, web3, isOpenAddItemsPage, toggleAddItemsPage, username, walletAddress, openUserAuctions, toggleFeed, /*withdrawRefunds,*/ endAuction }) =>{
 
     return(
         <>
@@ -16,7 +16,7 @@ const Home = ({ items, userItems, contract, accounts, web3, isOpenAddItemsPage, 
             username = {username} 
             walletAddress = {walletAddress}
             openUserAuctions = {openUserAuctions}
-            withdrawRefunds = {withdrawRefunds}
+            //withdrawRefunds = {withdrawRefunds}
         />
         {isOpenAddItemsPage ? (
             <AddItems 
@@ -53,6 +53,7 @@ const Home = ({ items, userItems, contract, accounts, web3, isOpenAddItemsPage, 
                             contract={contract} 
                             accounts={accounts} 
                             web3={web3} 
+                            walletAddress={walletAddress}
                         />
                         ))}
                     </div>

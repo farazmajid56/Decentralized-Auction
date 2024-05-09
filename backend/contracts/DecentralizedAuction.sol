@@ -20,15 +20,9 @@ contract DecentralizedAuction {
         address walletAddress;
     }
 
-    struct Refund{
-        address toWallet;
-        uint amount;
-    }
-
     Item[] public items;
     mapping(address => User) public users;
     mapping(address => bool) public registered;
-    // mapping(address => Refund[]) public pendingReturns;
 
     event UserRegistered(address userAddress, string username);
     //event AuctionCreated(uint itemId, string name, uint minBid, uint buyoutPrice, uint auctionEndTime);
@@ -98,25 +92,16 @@ contract DecentralizedAuction {
         item.highestBid = msg.value;
 
         emit HighestBidIncreased(itemId, msg.sender, msg.value);
-
-        // Check if the bid meets the buyout price
-        if (msg.value >= item.buyoutPrice) {
-            endAuction(itemId);
-        }
     }
 
 
     function buyout(uint itemId) public payable {
         require(itemId < items.length, "Invalid Item ID");
         Item storage item = items[itemId];
-        //require(block.timestamp < item.auctionEndTime, "Auction already ended.");
         require(!items[itemId].ended, "Auction already ended.");
-        require(msg.value >= item.buyoutPrice, "Buyout price not met.");
+        require(msg.value == item.buyoutPrice, "Buyout price not met.");
         
         item.ended = true;
-        //item.auctionEndTime = block.timestamp;
-        
-        // pendingReturns[item.highestBidder] += item.highestBid;
 
         if (item.highestBidder != address(0)) {
             (bool success, ) = item.highestBidder.call{value: item.highestBid}("");
@@ -127,18 +112,6 @@ contract DecentralizedAuction {
         
         emit ItemBoughtOut(itemId, msg.sender, msg.value);
     }
-
-    // function withdraw() public returns (uint) {
-    //     uint amount = pendingReturns[msg.sender];
-    //     if (amount > 0) {
-    //         pendingReturns[msg.sender] = 0;
-    //         if (!payable(msg.sender).send(amount)) {
-    //             pendingReturns[msg.sender] = amount;
-    //             return 0;
-    //         }
-    //     }
-    //     return amount;
-    // }
 
 
     function endAuction(uint itemId) internal {
